@@ -5,8 +5,6 @@ class Reflector(output: String) {
     private val wiring = Array(rotorLength) { index -> output[index] - 'A' }
 
     fun followWire(index: Int) : Int {
-        var step = index
-        step = wiring[step]
-        return step
+        return wiring[index]
     }
 }

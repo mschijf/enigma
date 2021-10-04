@@ -21,7 +21,11 @@ class Rotor (output: String, notchPositionChar: Char) {
     }
 
     fun notchJustPassed() : Boolean {
-        return notchPosition == 25-startPosition
+        return notchPosition == clockPosition(25-startPosition)
+    }
+
+    fun indexToLetter(index: Int): Char {
+        return 'A' + clockPosition(index - startPosition)
     }
 
     fun followWire(index: Int) : Int {
@@ -46,13 +50,5 @@ class Rotor (output: String, notchPositionChar: Char) {
 
     private fun clockPosition(number: Int): Int {
         return (number + rotorLength) % rotorLength
-    }
-
-    fun show() {
-        for (i in wiring)
-            println(i)
-        println("---------------------------")
-        for (i in dewiring)
-            println(i)
     }
 }

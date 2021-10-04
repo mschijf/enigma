@@ -3,20 +3,19 @@ import machine.Rotor
 import machine.RotorSet
 
 fun main(args: Array<String>) {
-//    val rotor = Rotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 'A')
 //    val rotor = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'A')
-//    rotor.show()
-//    println("---------------------------------------")
 //    rotor.setRingStellung('B')
 //    rotor.seStartPositon('A')
 //    rotor.setRingStellung('F')
 //    rotor.seStartPositon('Y')
-//    val output = rotor.code('A')
-//    println("Output = $output")
+//    val output = rotor.followWire('A' - 'A')
+//    val outputLetter = rotor.indexToLetter(output)
+//    println("Output = $output met letter $outputLetter")
 
     val enigma = Enigma(RotorSet())
-    val output = enigma.codeString("FUVEPUMWARVQKEFGHGDIJFMFXI")
-    println("Output = $output")
+    enigma.rotor1.setRingStellung('Z')
+    val outputStr = enigma.codeString("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    println("Output = $outputStr")
 
 //    val output = enigma.code('A')
 //    println("Output = $output")
