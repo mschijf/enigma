@@ -21,34 +21,22 @@ class Rotor (output: String, notchPositionChar: Char) {
     }
 
     fun notchJustPassed() : Boolean {
-        return notchPosition == clockPosition(25-startPosition)
-    }
-
-    fun indexToLetter(index: Int): Char {
-        return 'A' + clockPosition(index - startPosition)
+        return notchPosition == clockPosition((rotorLength-1)-startPosition)
     }
 
     fun followWire(index: Int) : Int {
-        var step = index
-        step = clockPosition(step - startPosition)
-        step = clockPosition(step - ringStellungPosition)
+        var step = clockPosition(index - startPosition - ringStellungPosition)
         step = wiring[step]
-        step = clockPosition(step + ringStellungPosition)
-        step = clockPosition(step + startPosition)
-        return step
+        return clockPosition(step + ringStellungPosition + startPosition)
     }
 
     fun followWireBack(index: Int) : Int {
-        var step = index
-        step = clockPosition(step - startPosition)
-        step = clockPosition(step - ringStellungPosition)
+        var step = clockPosition(index - startPosition - ringStellungPosition)
         step = dewiring[step]
-        step = clockPosition(step + ringStellungPosition)
-        step = clockPosition(step + startPosition)
-        return step
+        return clockPosition(step + ringStellungPosition + startPosition)
     }
 
     private fun clockPosition(number: Int): Int {
-        return (number + rotorLength) % rotorLength
+        return (number + 10 * rotorLength) % rotorLength
     }
 }

@@ -3,7 +3,7 @@ package machine
 import org.slf4j.LoggerFactory
 
 
-class Enigma () {
+class Enigma {
     private val EMPTY_ROTOR = Rotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 'A')
     private val EMPTY_REFLECTOR = Reflector("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     private val log = LoggerFactory.getLogger(javaClass)
