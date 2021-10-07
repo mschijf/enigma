@@ -3,14 +3,17 @@ package machine
 import org.slf4j.LoggerFactory
 
 
-class Enigma (rotorSet: RotorSet, val showLog: Boolean = false){
+class Enigma () {
+    private val EMPTY_ROTOR = Rotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 'A')
+    private val EMPTY_REFLECTOR = Reflector("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     private val log = LoggerFactory.getLogger(javaClass)
 
-    var plugBoard = PlugBoard('A' to 'B', 'C' to 'D')
-    var rotor1 = rotorSet.rotorI
-    var rotor2 = rotorSet.rotorII
-    var rotor3 = rotorSet.rotorIII
-    var reflector = rotorSet.reflectorB
+    val plugBoard = PlugBoard()
+    private val entryRotor = EntryRotor()
+    var rotor1 = EMPTY_ROTOR
+    var rotor2 = EMPTY_ROTOR
+    var rotor3 = EMPTY_ROTOR
+    var reflector = EMPTY_REFLECTOR
 
     fun codeString(input: String): String {
         return input.uppercase()
@@ -21,26 +24,18 @@ class Enigma (rotorSet: RotorSet, val showLog: Boolean = false){
 
     private fun codeLetter(inputLetter: Char): Char {
         rotateRotors()
-        log("Before: $inputLetter")
-        val letter = plugBoard.redirect(inputLetter)
-        log("After PlugBoard: $letter")
-        val out1 = rotor1.followWire(letter - 'A')
-        log("After rotor1  (code): $out1")
-        val out2 = rotor2.followWire(out1)
-        log("After rotor2  (code): $out2")
-        val out3 = rotor3.followWire(out2)
-        log("After rotor3  (code): $out3")
-        val reflect= reflector.followWire(out3)
-        log("After reflect (refl): $reflect")
-        val out4 = rotor3.followWireBack(reflect)
-        log("After rotor3  (deco): $out4")
-        val out5 = rotor2.followWireBack(out4)
-        log("After rotor2  (deco): $out5")
-        val out6 = rotor1.followWireBack(out5)
-        log("After rotor1  (deco): $out6")
-        val finalLetter = plugBoard.redirect('A' + out6)
-        log("After PlugBoard: $finalLetter")
-        return finalLetter
+        var letter = plugBoard.redirect(inputLetter)
+        var stream = entryRotor.letterToIndex(letter)
+        stream = rotor1.followWire(stream)
+        stream = rotor2.followWire(stream)
+        stream = rotor3.followWire(stream)
+        stream = reflector.followWire(stream)
+        stream = rotor3.followWireBack(stream)
+        stream = rotor2.followWireBack(stream)
+        stream = rotor1.followWireBack(stream)
+        letter = entryRotor.indexToLetter(stream)
+        letter = plugBoard.redirect(letter)
+        return letter
     }
 
     private fun rotateRotors() {
@@ -53,9 +48,8 @@ class Enigma (rotorSet: RotorSet, val showLog: Boolean = false){
             }
         }
     }
-    
+
     private fun log(logLine: String) {
-        if (showLog)
-            log.info(logLine)
+        log.info(logLine)
     }
 }

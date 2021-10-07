@@ -3,28 +3,34 @@ import machine.Rotor
 import machine.RotorSet
 
 fun main(args: Array<String>) {
-//    val rotor = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'A')
-//    rotor.setRingStellung('B')
-//    rotor.seStartPositon('A')
-//    rotor.setRingStellung('F')
-//    rotor.seStartPositon('Y')
-//    val output = rotor.followWire('A' - 'A')
-//    val outputLetter = rotor.indexToLetter(output)
-//    println("Output = $output met letter $outputLetter")
 
-    val enigma = Enigma(RotorSet(), false)
-//    enigma.rotor1.setRingStellung('Z')
-    val outputStr = enigma.codeString("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    val printStr = addSpace(outputStr, 5)
-    println("Output = ${printStr.lowercase()}")
+    val rotorSet = RotorSet()
+    val enigma = Enigma()
 
-//    val output = enigma.code('A')
-//    println("Output = $output")
-//    val output2 = enigma.code('A')
-//    println("Output = $output2")
-//    val output3 = enigma.code('A')
-//    println("Output = $output3")
+    enigma.rotor1 = rotorSet.rotorI
+    enigma.rotor1.seStartPositon('A')
+    enigma.rotor1.setRingStellung('A')
 
+    enigma.rotor2 = rotorSet.rotorII
+    enigma.rotor2.seStartPositon('A')
+    enigma.rotor2.setRingStellung('A')
+
+    enigma.rotor3 = rotorSet.rotorIII
+    enigma.rotor3.seStartPositon('A')
+    enigma.rotor3.setRingStellung('A')
+
+    enigma.reflector = rotorSet.reflectorB
+
+    enigma.plugBoard.addPlug('A' to 'B')
+
+
+    val inputStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    val outputStr = enigma.codeString(inputStr)
+
+    val printInStr = addSpace(inputStr, 5)
+    val printOutStr = addSpace(outputStr, 5)
+    println("Input  = $printInStr")
+    println("Output = ${printOutStr.lowercase()}")
 }
 
 fun addSpace(s: String, after: Int): String {
